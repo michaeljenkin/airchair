@@ -1,3 +1,6 @@
+chair_ws/log/
+chair_ws/build/
+chair_ws/install/
 devel/
 logs/
 build/
