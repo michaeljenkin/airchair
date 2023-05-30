@@ -1,4 +1,4 @@
-material apriltag_36h10
+material apriltag_36h10_1
 {
   technique
   {
@@ -6,7 +6,7 @@ material apriltag_36h10
     {
       texture_unit
       {
-        texture apriltag_36h10_0.png
+        texture apriltag_36h10_1.png
         filtering anistropic
         max_anisotropy 16
       }

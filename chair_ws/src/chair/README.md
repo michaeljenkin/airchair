@@ -1,13 +1,10 @@
-This repository contains code associated with Chapter 5 of CPMR 3rd Editon by G. Dudek and M. Jenkin. Specific ros2 launch files provided include
+This repository contains code associated with the airchair project.
 
-* aruco-robot.launch.py - This provides a simulated aruco target and robot
-* camera-robot.launch.py - A basic simulated differential drive robot with a camera
-* canny-edges-camera-robot.launch.py - A simulated robot with a camera running Canny edge detection
-* good-features-camera-robot.launch.py - A simulated robot with a camera running good features to track
-* harrs-corners-camera-robot.launch.py - A simulated robot with a camera running Harris corner detector
-* view-camera-robot.launch.py - A simple node that displays the value of /mycamera/image_raw 
+The goal here is to support N wheelchairs with different targets on them.
+By default the chairs are named chair_a through chair_x. There is a launch file that just launches chair_a and another that launches a and b. Should be clear from those examples.
 
-In addition to these launch files, the following ROS run file is provided
+To drive them around with the keyboard, use
 
-* opencv_camera - This connects to /dev/Video0 using opencv and publishes Images on /mycamera/image_raw
+
+ros2 run teleop_twist_keyboard teleop_twist_keyboard cmd_vel:=chair_a/cmd_vel 
 
