@@ -9,7 +9,7 @@ import xacro
 
 def generate_launch_description():
     urdf = os.path.join(get_package_share_directory('chair'), 'airchair.urdf.xacro')
-    robot_desc = xacro.process_file(urdf, mappings={'name' : 'camera_robot'}).toxml()
+    robot_desc = xacro.process_file(urdf, mappings={'name' : 'chair_a', 'target' :'apriltag_36h10_0'}).toxml()
 
     return LaunchDescription([
         IncludeLaunchDescription(
