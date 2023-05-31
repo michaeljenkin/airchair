@@ -15,6 +15,8 @@
 <robot name="$(arg name)" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <!-- Define the robot -->
+  <xacro:arg name="show_video" default="true" />
+  <xacro:property name="show_video" value="$(arg show_video)" />
   <xacro:arg name="robot_name" default="chair" />
   <xacro:property name="robot_name" value="$(arg name)" />
   <xacro:arg name="target" default="apriltag_36h10_0" />
@@ -147,7 +149,7 @@
 
   <gazebo reference="camera_link">
     <sensor type="camera" name="camera"> 
-      <visualize>true</visualize>
+      <visualize>${show_video}</visualize>
       <camera>
         <horizontal_fov>${65 * 3.1415/180}</horizontal_fov>
         <image>
@@ -173,10 +175,10 @@
   <!-- Left wheel -->
   <link name="left_wheel_link">
     <visual>
-      <origin rpy="0 1.5708 0" xyz="0 0 0" />
+      <!-- origin rpy="0 1.5708 0" xyz="0 0 0" -->
       <geometry>
-        <!--cylinder length="${robot_wheel_width}" radius="${robot_wheel_radius}" -->
-        <mesh filename="$(find chair)/rearwheel.obj" scale="0.001 0.001 0.001"/>
+        <cylinder length="${robot_wheel_width}" radius="${robot_wheel_radius}" />
+        <!-- mesh filename="$(find chair)/rearwheel.obj" scale="0.001 0.001 0.001"-->>
       </geometry>
     </visual>
     <collision>
@@ -197,10 +199,10 @@
   <!-- Right wheel -->
   <link name="right_wheel">
     <visual>
-      <origin rpy="0 1.5708 0" xyz="0 0 0" />
+      <!-- origin rpy="0 1.5708 0" xyz="0 0 0" -->
       <geometry>
-        <!-- cylinder length="${robot_wheel_width}" radius="${robot_wheel_radius}" -->
-        <mesh filename="$(find chair)/rearwheel.obj" scale="0.001 0.001 0.001"/>
+        <cylinder length="${robot_wheel_width}" radius="${robot_wheel_radius}" />
+        <!-- mesh filename="$(find chair)/rearwheel.obj" scale="0.001 0.001 0.001"-->
       </geometry>
     </visual>
     <collision>
