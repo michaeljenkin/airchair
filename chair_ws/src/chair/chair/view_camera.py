@@ -12,7 +12,7 @@ class ViewCamera(Node):
         super().__init__('view_camera')
         self.get_logger().info(f'{self.get_name()} created')
 
-        self.declare_parameter('image', "/mycamera/image_raw")
+        self.declare_parameter('image', "/chair_a/camera/image_raw")
 
         self._image_topic = self.get_parameter('image').get_parameter_value().string_value
         self.create_subscription(Image, self._image_topic, self._image_callback, 1)

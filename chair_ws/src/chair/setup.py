@@ -20,16 +20,13 @@ setup(
     zip_safe=True,
     maintainer='jenkin',
     maintainer_email='jenkin@yorku.ca',
-    description='CPMR 3rd Edition Chpater 5',
+    description='Air Chair',
     license='MIT License',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
             'aruco_target = chair.aruco_target:main',
             'view_camera = chair.view_camera:main',
-            'canny_edges = chair.canny_edges:main',
-            'good_features = chair.good_features:main',
-            'harris_corners = chair.harris_corners:main',
             'opencv_camera = chair.opencv_camera:main',
         ],
     },

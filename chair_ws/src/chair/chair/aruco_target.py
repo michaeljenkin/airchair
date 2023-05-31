@@ -37,8 +37,8 @@ class ArucoTarget(Node):
         super().__init__('aruco_target')
         self.get_logger().info(f'{self.get_name()} created')
 
-        self.declare_parameter('image', "/mycamera/image_raw")
-        self.declare_parameter('info', "/mycamera/camera_info")
+        self.declare_parameter('image', "/chair_a/camera/image_raw")
+        self.declare_parameter('info', "/chair_a/camera/camera_info")
 
         self._image_topic = self.get_parameter('image').get_parameter_value().string_value
         self._info_topic = self.get_parameter('info').get_parameter_value().string_value
