@@ -5,8 +5,9 @@
 
         This robot has a camera
         It now has a target
+        It now tilts the camera
         
-	Version 1.0.
+	Version 1.2.
 	-->
 
 
@@ -15,6 +16,8 @@
 <robot name="$(arg name)" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <!-- Define the robot -->
+  <xacro:arg name="camera_tilt" default="0.0" />
+  <xacro:property name="camera_tilt" value="$(arg camera_tilt)" />
   <xacro:arg name="show_video" default="true" />
   <xacro:property name="show_video" value="$(arg show_video)" />
   <xacro:arg name="robot_name" default="chair" />
@@ -141,7 +144,7 @@
   </link>
 
   <joint name="camera_joint" type="fixed">
-    <origin xyz="${robot_camera_xoffset} 0.0 ${robot_camera_zoffset+robot_camera_height/2}" rpy="0.0 0.0 0.0" />
+    <origin xyz="${robot_camera_xoffset} 0.0 ${robot_camera_zoffset+robot_camera_height/2}" rpy="0 ${camera_tilt} 0" />
     <parent link="base_link" />
     <child link="camera_link" />
     <axis xyz="0 0 1" />

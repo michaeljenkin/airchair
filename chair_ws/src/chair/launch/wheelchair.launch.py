@@ -9,10 +9,11 @@ import xacro
 
 def generate_launch_description():
     robots = [
-        {'name': 'chair_a', 'target': 'apriltag_36h10_0', 'x': '0', 'y': '0', 'theta': '0', 'show_video': 'false'}
+        {'name': 'chair_a', 'target': 'apriltag_36h10_0', 'x': '0', 'y': '0', 'theta': '0', 'show_video': 'true', 'camera_tilt': '0.25'} # tilt in radians
         ]
     print(robots)
     urdf = os.path.join(get_package_share_directory('chair'), 'airchair.urdf.xacro')
+    print(urdf)
 
 
     nodelist = []
@@ -24,7 +25,8 @@ def generate_launch_description():
 
     for robot in robots:
         print(robot)
-        robot_desc = xacro.process_file(urdf, mappings={'name' : robot['name'], 'target' : robot['target'], 'show_video': robot['show_video']}).toxml()
+        robot_desc = xacro.process_file(urdf, mappings={'name' : robot['name'], 'target' : robot['target'], 'show_video': robot['show_video'], 'camera_tilt': robot['camera_tilt']}).toxml()
+        print(robot_desc)
         nodelist.append(
             Node(
                 namespace = robot['name'],
