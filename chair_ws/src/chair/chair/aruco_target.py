@@ -49,11 +49,15 @@ class ArucoTarget(Node):
         self._bridge = CvBridge()
 
         dict = ArucoTarget._DICTS.get(tag_set.lower(), None)
+        self.get_logger().info(f'{self.get_name()} has dict {dict}')
         if dict is None:
             self.get_logger().error(f'ARUCO tag set {tag_set} not found')
         else:
-            self._aruco_dict = cv2.aruco.Dictionary_get(dict)
-            self._aruco_param = cv2.aruco.DetectorParameters_create()
+            self._aruco_dict = cv2.aruco.getPredefinedDictionary(dict)
+            self._aruco_param = cv2.aruco.DetectorParameters()
+            self._aruco_detector = cv2.aruco.ArucoDetector(self._aruco_dict, self._aruco_param)
+#            self._aruco_dict = cv2.aruco.Dictionary_get(dict)
+#            self._aruco_param = cv2.aruco.DetectorParameters_create()
             self._target_width = target_width
             self._image = None
             self._cameraMatrix = None
@@ -65,11 +69,27 @@ class ArucoTarget(Node):
         self._distortion = np.reshape(msg.d, (1,5))
         self._cameraMatrix = np.reshape(msg.k, (3,3))
 
+    def _estimatePoseSingleMarkers(self, corners, marker_size, mtx, distortion):
+        marker_points = np.array([ [-marker_size/2, marker_size/2, 0],
+                                   [marker_size/2, marker_size/2, 0],
+                                   [marker_size/2, -marker_size/2, 0],
+                                   [-marker_size/2, -marker_size/2, 0]], dtype=np.float32)
+        trash =[]
+        rvecs = []
+        tvecs = []
+        for c in corners:
+            nada, R, t = cv2.solvePnP(marker_points, c, mtx, distortion, False, cv2.SOLVEPNP_IPPE_SQUARE)
+            rvecs.append(R)
+            tvecs.append(t)
+            trash.append(nada)
+        return rvecs, tvecs, trash
+
     def _image_callback(self, msg):
         self._image = self._bridge.imgmsg_to_cv2(msg, "bgr8") 
 
         grey = cv2.cvtColor(self._image, cv2.COLOR_BGR2GRAY)
-        corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(grey, self._aruco_dict)
+        corners, ids, rejectedImgPoints = self._aruco_detector.detectMarkers(grey)
+#        corners, ids, rejectedImgPoints = cv2.aruco.detectMarkers(grey, self._aruco_dict)
         frame = cv2.aruco.drawDetectedMarkers(self._image, corners, ids)
         if ids is None:
             self.get_logger().info(f"No targets found!")
@@ -78,12 +98,16 @@ class ArucoTarget(Node):
             self.get_logger().info(f"We have not yet received a camera_info message")
             return
 
-        rvec, tvec, _objPoints = cv2.aruco.estimatePoseSingleMarkers(corners, self._target_width, self._cameraMatrix, self._distortion)
+        rvec, tvec, _objPoints = self._estimatePoseSingleMarkers(corners, self._target_width, self._cameraMatrix, self._distortion)
+        self.get_logger().info(f"We got back {rvec} {tvec}")
+#        rvec, tvec, _objPoints = cv2.aruco.estimatePoseSingleMarkers(corners, self._target_width, self._cameraMatrix, self._distortion)
         result = self._image.copy()
         for r,t in zip(rvec,tvec):
             self.get_logger().info(f"Found a target at {t} rotation {r}")
-            result = cv2.aruco.drawAxis(result, self._cameraMatrix, self._distortion, r, t, self._target_width)
+            result = cv2.drawFrameAxes(result, self._cameraMatrix, self._distortion, r, t, self._target_width)
+#            result = cv2.aruco.drawAxis(result, self._cameraMatrix, self._distortion, r, t, self._target_width)
         cv2.imshow('window', result)
+#        cv2.imshow('window', frame)
         cv2.waitKey(3)
 
 
