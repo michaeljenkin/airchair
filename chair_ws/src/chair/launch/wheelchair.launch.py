@@ -9,7 +9,7 @@ import xacro
 
 def generate_launch_description():
     robots = [
-        {'name': 'chair_a', 'target': 'apriltag_36h10_0', 'x': '0', 'y': '0', 'theta': '0', 'show_video': 'true', 'camera_tilt': '0.25'} # tilt in radians
+        {'name': 'chair_a', 'target': 'burmashave', 'x': '0', 'y': '0', 'theta': '0', 'show_video': 'true', 'camera_tilt': '0.25'} # tilt in radians
         ]
     print(robots)
     urdf = os.path.join(get_package_share_directory('chair'), 'airchair.urdf.xacro')
@@ -34,7 +34,7 @@ def generate_launch_description():
                 executable='robot_state_publisher',
                 name='robot_state_publisher',
                 output='screen',
-                parameters=[{'use_sim_time': 'false', 'robot_description': robot_desc}],
+                parameters=[{'use_sim_time': False, 'robot_description': robot_desc}],
                 arguments=[urdf])
             )
         nodelist.append(
